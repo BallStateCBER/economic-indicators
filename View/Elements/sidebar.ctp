@@ -1,4 +1,10 @@
-<?php echo $this->Html->link('Home', array('controller' => 'pages', 'action' => 'home')); ?>
+<?php echo $this->Html->link(
+	'Economic Indicators Home', 
+	array(
+		'controller' => 'pages', 
+		'action' => 'home'
+	)
+); ?>
 
 <?php echo $this->element('datasets_nav_by_area'); ?>
 
