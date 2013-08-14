@@ -1,25 +1,8 @@
 function prepareSidebar() {
-	var opening_group = false;
-	/*
 	$('.menu_section a.group').click(function(event) {
 		event.preventDefault();
-		
-		// Take no action if a group is in the process of being opened
-		if (opening_group) {
-			return;
-		}
-		
-		opening_group = true;
-		var list = $(this).next('.categories_in_group');
-		$('#content').fadeOut(200, function() {
-			$(this).empty();
-			$(this).append(list.clone());
-			$('#content').fadeIn(200, function() {
-				opening_group = false;
-			});
-		});
+		$(this).next('.categories_in_group').slideToggle(300);
 	});
-	*/
 }
 
 function setupReleaseCalendar(release_dates) {

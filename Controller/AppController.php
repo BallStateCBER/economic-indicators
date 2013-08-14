@@ -78,6 +78,7 @@ class AppController extends Controller {
 		);
 
 		$this->Auth->allow();
+		$this->__prepareSidebar();
 	}
 
 	public function beforeRender() {
@@ -118,8 +119,6 @@ class AppController extends Controller {
 			$menu[] = $section;
 		}
 		*/
-
-		$this->__prepareSidebar();
 	}
 
 	private function __prepareSidebar() {
