@@ -3,7 +3,8 @@ App::uses('AppModel', 'Model');
 class LocationType extends AppModel {
 	public $name = 'LocationType';
 	public $hasMany = array('Location', 'Category');
-	
+	public $order = 'LocationType.weight ASC';
+
 	public function getList() {
 		$cache_key = "locationTypeList";
 		if (Configure::read('use_cache') && $cached = Cache::read($cache_key)) {
@@ -15,7 +16,7 @@ class LocationType extends AppModel {
 		}
         return $result;
 	}
-	
+
 	public function getLocationsOfTypeAndCategories($id) {
 		$cache_key = "getLocationsOfTypeAndCategories($id)";
 		if (Configure::read('use_cache') && $cached = Cache::read($cache_key)) {
@@ -25,7 +26,7 @@ class LocationType extends AppModel {
 			'order' => 'name ASC',
 			'conditions' => array('id' => $id),
 			'contain' => array(
-				'Location' => array('order' => 'Location.name ASC'), 
+				'Location' => array('order' => 'Location.name ASC'),
 				'Category' => array('order' => 'Category.name ASC')
 			)
 		));
@@ -37,11 +38,11 @@ class LocationType extends AppModel {
 		}
         return $result;
 	}
-	
+
 	public function getCountries() {
 		return $this->getLocationsOfTypeAndCategories(1);
 	}
-	
+
 	public function getStates() {
 		return $this->getLocationsOfTypeAndCategories(2);
 	}
@@ -49,11 +50,11 @@ class LocationType extends AppModel {
 	public function getMsas() {
 		return $this->getLocationsOfTypeAndCategories(3);
 	}
-	
+
 	public function getCounties() {
 		return $this->getLocationsOfTypeAndCategories(4);
 	}
-	
+
 	/**
 	 * Returns the ID of the default location for a location type
 	 * @param string|int $loc_type_name
@@ -71,11 +72,11 @@ class LocationType extends AppModel {
 				'contain' => false
 			));
 			if (empty($result)) {
-				throw new InternalErrorException("Location type \"$loc_type\" not recognized");	
+				throw new InternalErrorException("Location type \"$loc_type\" not recognized");
 			}
 			$loc_type_id = $result['LocationType']['id'];
 		}
-		
+
 		$result = $this->Location->find('first', array(
 			'conditions' => array(
 				'Location.location_type_id' => $loc_type_id
