@@ -33,12 +33,13 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 	public $helpers = array(
-		'Js' => array('Jquery'), 
-		'Form', 
-		'Html', 
+		'Js' => array('Jquery'),
+		'Form',
+		'Html',
 		'Session'
 	);
 	public $components = array(
+		'DebugKit.Toolbar',
 		'DataCenter.AutoLogin' => array(
 			'username' => 'email',
 			'expires' => '+1 year'
@@ -52,33 +53,33 @@ class AppController extends Controller {
         ),
 		'DataCenter.Flash'
 	);
-	
+
 	public function beforeFilter() {
 		$this->AutoLogin->settings = array(
 			// Model settings
 			'model' => 'User',
 			'username' => 'email',
 			'password' => 'password',
-	 
+
 			// Controller settings
 			'plugin' => '',
 			'controller' => 'users',
 			'loginAction' => 'login',
 			'logoutAction' => 'logout',
-	 
+
 			// Cookie settings
 			'cookieName' => 'rememberMe',
 			'expires' => '+1 year',
-	 
+
 			// Process logic
 			'active' => true,
 			'redirect' => true,
 			'requirePrompt' => true
 		);
-		
+
 		$this->Auth->allow();
 	}
-	
+
 	public function beforeRender() {
 		/* ARRANGED BY FREQUENCY
 		$this->loadModel('Frequency');
@@ -93,7 +94,7 @@ class AppController extends Controller {
 			)
 		));
 		$frequencies = array_reverse($frequencies);
-		
+
 		$menu = array();
 		foreach ($frequencies as $frequency) {
 			$section = array(
@@ -114,10 +115,14 @@ class AppController extends Controller {
 				ksort($loc_type_info['Category']);
 			}
 			$section['LocationType'] = $loc_types;
-			$menu[] = $section;	
+			$menu[] = $section;
 		}
 		*/
-		
+
+		$this->__prepareSidebar();
+	}
+
+	private function __prepareSidebar() {
 		// Create menu for sidebar
 		$this->loadModel('LocationType');
 		$this->loadModel('Dataset');
@@ -132,19 +137,13 @@ class AppController extends Controller {
 				)
 			)
 		));
-		$location_type_list = array();
 		$this->loadModel('Category');
 		foreach ($menu as $k => &$location_type) {
-			// Populate $location_type_list for the release calendar
-			$loc_type_id = $location_type['LocationType']['id'];
-			$loc_type_name = $location_type['LocationType']['display_name'];
-			$location_type_list[$loc_type_id] = $loc_type_name;
-			
 			// Arrange by group
 			$location_type['Category'] = $this->Category->arrangeByGroup($location_type['Category']);
 			foreach ($location_type['Category'] as $group_name => $categories_in_group) {
 				foreach ($categories_in_group as $category_name => $category) {
-					
+
 					// Remove links to nonexistent data sets
 					$has_data = $this->Dataset->find('count', array(
 						'conditions' => array('Dataset.category_id' => $category['id'])
@@ -153,44 +152,22 @@ class AppController extends Controller {
 						unset($location_type['Category'][$group_name][$category_name]);
 					}
 				}
-				
+
 				// Remove empty groups
 				if (empty($location_type['Category'][$group_name])) {
-					unset($location_type['Category'][$group_name]);	
+					unset($location_type['Category'][$group_name]);
 				}
 			}
 		}
-		
-		// Prepare data for release calendar
-		$this->loadModel('Release');
-		$categories = $this->Category->find('list');
-		$releases = $this->Release->getUpcoming();
-		$calendar = array();
-		foreach ($releases as $release) {
-			// Skip if this is a release for a Category that has been deleted 
-			if (! isset($release['Category']['name']) || empty($release['Category']['name'])) {
-				continue;
-			}
-			$date = $release['Release']['date'];
-			$loc_type_id = $release['Category']['location_type_id'];
-			$location_type_name = $location_type_list[$loc_type_id];
-			$category_id = $release['Release']['category_id'];
-			$category = $categories[$category_id];
-			$calendar[$date][] = compact('location_type_name', 'category');
-		}
-		if (empty($releases)) {
-			$calendar['max_date'] = null;
-		} else {
-			$dates = array_keys($calendar);
-			sort($dates);
-			$calendar['max_date'] = end($dates);
-		}
+
+		$this->loadModel('Frequency');
 		$this->loadModel('CategoryGroup');
 		$this->set(array(
 			'menu' => $menu,
 			'logged_in' => $this->Auth->loggedIn(),
-			'calendar' => $calendar,
-			'category_groups' => $this->CategoryGroup->find('list')
+
+			'category_groups' => $this->CategoryGroup->find('list'),
+			'frequencies' => $this->Frequency->find('list')
 		));
 	}
 }
