@@ -26,8 +26,11 @@
 							),
 							array('class' => 'group')
 						); ?>
-
-						<div class="categories_in_group">
+						<?php if ($location_name == 'Indiana Counties' || $location_name == 'Indiana Metropolitan Statistical Areas (MSAs)'): ?>
+							<div class="categories_in_group" style="display: block;">
+						<?php else: ?>
+							<div class="categories_in_group">
+						<?php endif; ?>
 							<ul>
 								<?php foreach ($categories as $category): ?>
 									<li>
