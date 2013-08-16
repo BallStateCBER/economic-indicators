@@ -7,7 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class ReleasesController extends AppController {
 	public $components = array('Session');
-	
+
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->deny('add', 'edit', 'delete');
@@ -65,7 +65,7 @@ class ReleasesController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Release->create();
-			
+
 			// Deduce location_id from location_type_id
 			//$this->loadModel('LocationType');
 			//$loc_type_name = $this->request->data['Release']['location_type_name'];
@@ -73,7 +73,7 @@ class ReleasesController extends AppController {
 			$category_id = $this->request->data['Release']['category_id'];
 			$date = $this->request->data['Release']['date'];
 			$is_redundant = $this->Release->isScheduled($category_id, $date);
-			
+
 			// If this has already been entered, don't add another,
 			// but still display a success message.
 			if ($is_redundant || $this->Release->save($this->request->data)) {
@@ -100,14 +100,14 @@ class ReleasesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {		
+	public function edit($id = null) {
 		$this->Release->id = $id;
 		if (! $this->Release->exists()) {
 			throw new NotFoundException(__('Invalid release'));
 		}
-		
+
 		if ($this->request->is('post') || $this->request->is('put')) {
-			
+
 			// Deduce location_id from location_type_id
 			//$this->loadModel('LocationType');
 			//$loc_type_name = $this->request->data['Release']['location_type_name'];
@@ -159,5 +159,11 @@ class ReleasesController extends AppController {
 		}
 		$this->Flash->error(__('Release was not deleted'));
 		$this->redirect(array('action' => 'index'));
+	}
+
+	// Page provided for Victoria to copy and paste content into emails
+	public function upcoming() {
+		$this->__setUpcomingReleases();
+		$this->set('title_for_layout', 'Upcoming Releases');
 	}
 }
