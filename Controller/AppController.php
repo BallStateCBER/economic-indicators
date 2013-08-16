@@ -81,46 +81,6 @@ class AppController extends Controller {
 		$this->__prepareSidebar();
 	}
 
-	public function beforeRender() {
-		/* ARRANGED BY FREQUENCY
-		$this->loadModel('Frequency');
-		$frequencies = $this->Frequency->find('all', array(
-			'contain' => array(
-				'Category' => array(
-					'fields' => array('id', 'name'),
-					'LocationType' => array(
-						'fields' => array('id', 'name', 'display_name')
-					)
-				)
-			)
-		));
-		$frequencies = array_reverse($frequencies);
-
-		$menu = array();
-		foreach ($frequencies as $frequency) {
-			$section = array(
-				'Frequency' => $frequency['Frequency']
-			);
-			$loc_types = array();
-			foreach ($frequency['Category'] as $category) {
-				$loc_type_id = $category['LocationType']['id'];
-				if (! isset($loc_types[$loc_type_id])) {
-					$loc_types[$loc_type_id] = $category['LocationType'];
-				}
-				$loc_types[$loc_type_id]['Category'][$category['name']] = array(
-					'id' => $category['id'],
-					'name' => $category['name']
-				);
-			}
-			foreach ($loc_types as $loc_type_id => &$loc_type_info) {
-				ksort($loc_type_info['Category']);
-			}
-			$section['LocationType'] = $loc_types;
-			$menu[] = $section;
-		}
-		*/
-	}
-
 	private function __prepareSidebar() {
 		// Create menu for sidebar
 		$this->loadModel('LocationType');
@@ -138,18 +98,43 @@ class AppController extends Controller {
 		));
 		$this->loadModel('Category');
 		foreach ($menu as $k => &$location_type) {
+			if (empty($location_type['Category'])) {
+				unset($menu[$k]);
+				continue;
+			}
+
+			$select2_loctype = array(
+				'text' => $location_type['LocationType']['display_name'],
+				'children' => array()
+			);
+
 			// Arrange by group
 			$location_type['Category'] = $this->Category->arrangeByGroup($location_type['Category']);
 			foreach ($location_type['Category'] as $group_name => $categories_in_group) {
+
+				$select2_group = array(
+					'text' => $group_name,
+					'children' => array()
+				);
+
 				foreach ($categories_in_group as $category_name => $category) {
 
 					// Remove links to nonexistent data sets
 					$has_data = $this->Dataset->find('count', array(
 						'conditions' => array('Dataset.category_id' => $category['id'])
 					));
-					if (! $has_data) {
+					if ($has_data) {
+						$select2_group['children'][] = array(
+							'id' => $category['id'],
+							'text' => $category['name'].' ('.strtolower(reset(explode(' ', $category['Frequency']['name']))).')'
+						);
+					} else {
 						unset($location_type['Category'][$group_name][$category_name]);
 					}
+				}
+
+				if (! empty($select2_group['children'])) {
+					$select2_loctype['children'][] = $select2_group;
 				}
 
 				// Remove empty groups
@@ -157,6 +142,9 @@ class AppController extends Controller {
 					unset($location_type['Category'][$group_name]);
 				}
 			}
+
+			$select2_data[] = $select2_loctype;
+
 		}
 
 		$this->loadModel('Frequency');
@@ -164,9 +152,46 @@ class AppController extends Controller {
 		$this->set(array(
 			'menu' => $menu,
 			'logged_in' => $this->Auth->loggedIn(),
-
 			'category_groups' => $this->CategoryGroup->find('list'),
-			'frequencies' => $this->Frequency->find('list')
+			'frequencies' => $this->Frequency->find('list'),
+			'select2_data' => $this->__getSelect2Data($menu)
 		));
+	}
+
+	private function __getSelect2Data($menu) {
+		$arrange_into_groups = false;
+		$select2_data = array();
+		foreach ($menu as $k => &$location_type) {
+			$select2_loctype = array(
+				'text' => $location_type['LocationType']['display_name'],
+				'children' => array()
+			);
+			foreach ($location_type['Category'] as $group_name => $categories_in_group) {
+				$select2_group = array(
+					'text' => $group_name,
+					'children' => array()
+				);
+				foreach ($categories_in_group as $category_name => $category) {
+					$label = $category['name'].' ('.strtolower(reset(explode(' ', $category['Frequency']['name']))).')';
+					$select2_group['children'][$label] = array(
+						'id' => $category['id'],
+						'text' => $label
+					);
+				}
+				if ($arrange_into_groups) {
+					// Change from associative to numerically-indexed
+					$select2_group['children'] = array_values($select2_group['children']);
+					$select2_loctype['children'][] = $select2_group;
+				} else {
+					$select2_loctype['children'] = array_merge($select2_loctype['children'], $select2_group['children']);
+				}
+			}
+			if (! $arrange_into_groups) {
+				ksort($select2_loctype['children']);
+				$select2_loctype['children'] = array_values($select2_loctype['children']);
+			}
+			$select2_data[] = $select2_loctype;
+		}
+		return $select2_data;
 	}
 }

@@ -1,3 +1,20 @@
+<input id="sidebar_category_select" class="select2-offscreen" type="hidden" tabindex="-1">
+
+<?php
+	$this->Html->css('/select2/select2.css', null, array('inline' => false));
+	$this->Html->script('/select2/select2.js', array('inline' => false));
+	$dataset_view_url = Router::url(array(
+		'controller' => 'datasets',
+		'action' => 'view'
+	), true);
+	$this->Js->buffer("
+		prepareSidebar();
+		var select2_data = ".$this->Js->object($select2_data).";
+		var dataset_view_url = '".$dataset_view_url."';
+		prepareSelect2(select2_data, dataset_view_url);
+	");
+?>
+
 <?php foreach ($menu as $k => $section): ?>
 	<section>
 		<h2>
@@ -62,5 +79,3 @@
 		<?php endif; ?>
 	</section>
 <?php endforeach; ?>
-
-<?php $this->Js->buffer("prepareSidebar();"); ?>

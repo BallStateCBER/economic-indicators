@@ -5,6 +5,19 @@ function prepareSidebar() {
 	});
 }
 
+function prepareSelect2(select2_data, dataset_view_url) {
+	$("#sidebar_category_select").select2({
+		data: select2_data,
+		width: '180px',
+		placeholder: 'Select a data category...'
+	});
+	$("#sidebar_category_select").on('change', function() {
+		var loading_img = $('<img src="/data_center/img/loading_small.gif" alt="Loading" class="loading" />');
+		$('#s2id_sidebar_category_select').after(loading_img);
+		window.location.href = dataset_view_url+'/'+$(this).val();
+	});
+}
+
 function setupReleaseCalendar(release_dates) {
 	var d = new Date();
 	var this_year = d.getFullYear();
