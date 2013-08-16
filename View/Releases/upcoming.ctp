@@ -10,7 +10,9 @@
 	<ul>
 		<?php foreach ($releases as $release): ?>
 			<li>
-				<?php echo $release['category']; ?>
+				<strong>
+					<?php echo $release['category']; ?>
+				</strong>
 				<br />
 				<?php echo $release['location_type_name']; ?>
 			</li>
