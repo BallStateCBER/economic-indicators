@@ -195,7 +195,7 @@ class AppController extends Controller {
 		return $select2_data;
 	}
 
-	private function __setUpcomingReleases() {
+	public function __setUpcomingReleases() {
 		$this->loadModel('LocationType');
 		$location_type_list = $this->LocationType->find('list');
 
