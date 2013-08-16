@@ -10,7 +10,7 @@ class CategoriesController extends AppController {
 		'limit' => 100,
 		'order' => 'Category.name ASC'
 	);
-	
+
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->deny('add', 'edit', 'delete', 'index');
@@ -24,7 +24,7 @@ class CategoriesController extends AppController {
 		$this->Category->recursive = 0;
 		$this->set('categories', $this->paginate());
 	}
-	
+
 	/**
 	 * Browse, used by the general public
 	 * @return void
@@ -39,7 +39,7 @@ class CategoriesController extends AppController {
 			));
 			$loc_type_id = empty($result) ? null : $result['LocationType']['id'];
 			$loc_display_name = empty($result) ? null : $result['LocationType']['display_name'];
-			
+
 			$frequency = $this->request->pass[1];
 			$result = $this->Category->Frequency->find('first', array(
 				'conditions' => array('Frequency.name' => $frequency),
@@ -47,7 +47,7 @@ class CategoriesController extends AppController {
 			));
 			$frequency_id = empty($result) ? null : $result['Frequency']['id'];
 		}
-		
+
 		if ($loc_type_id && $frequency_id) {
 			$this->set(array(
 				'title_for_layout' => "Categories: $loc_display_name $frequency",
@@ -75,11 +75,11 @@ class CategoriesController extends AppController {
 		if (!$this->Category->exists()) {
 			throw new NotFoundException(__('Invalid category'));
 		}
-		
-		// If this category only applies to one location, 
+
+		// If this category only applies to one location,
 		// redirect to its dataset instead of presenting location choices
 		$loc_type_id = $this->Category->field('location_type_id');
-		
+
 		// If 'county', direct to 'all counties'
 		if ($loc_type_id == 4) {
 			$this->redirect(array(
@@ -101,7 +101,7 @@ class CategoriesController extends AppController {
 				'location_id' => $location_id
 			));
 		}
-		
+
 		$this->Category->LocationType->id = $loc_type_id;
 		switch ($this->Category->LocationType->field('name')) {
 			case 'msa':
@@ -113,7 +113,7 @@ class CategoriesController extends AppController {
 			default:
 				$loc_name_postfix = null;
 		}
-		
+
 		$this->set(array(
 			'title_for_layout' => $this->Category->field('name'),
 			'category_id' => $category_id,
@@ -186,7 +186,7 @@ class CategoriesController extends AppController {
 		$this->Flash->error(__('Category was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}
-	
+
 	/**
 	 * If the categories table is empty, populates it
 	 */
@@ -195,18 +195,19 @@ class CategoriesController extends AppController {
 			$this->Flash->notification('Import cannot take place while categories table is populated. Clear the table before repeating.');
 			$this->redirect('/');
 		}
-		
+
 		$category_groups_list = $this->Category->CategoryGroup->find('list');
 		$frequencies = $this->Category->Frequency->find('list');
 		foreach ($frequencies as $fid => $frequency) {
 			// Just keep the lowercase first word of each frequency name
 			$frequencies[$fid] = strtolower(reset(explode(' ', $frequency)));
 		}
+		$this->Category->LocationType->displayField = 'name';
 		$location_types = $this->Category->LocationType->find('list');
-		
+
 		$categories = array(
 			'country' => array(
-				'Pay and Benefits' => array( 
+				'Pay and Benefits' => array(
 					'Average Weekly earnings (Monthly)',
 					'Average Weekly hours (Monthly)',
 					'Personal Income and Savings (monthly)'
@@ -299,18 +300,18 @@ class CategoriesController extends AppController {
 				)
 			)
 		);
-		
+
 		foreach ($categories as $location_type => $category_groups) {
 			$loc_type_id = array_search($location_type, $location_types);
 			if ($loc_type_id === false) {
 				$this->Flash->error("Could not find a location type matching '$location_type'.");
-				continue;	
+				continue;
 			}
 			foreach ($category_groups as $category_group => $categories) {
 				$cat_group_id = array_search($category_group, $category_groups_list);
 				if ($cat_group_id === false) {
 					$this->Flash->error("Could not find a category group matching '$category_group'.");
-					continue;	
+					continue;
 				}
 				foreach ($categories as $category) {
 					$frequency_start = strrpos($category, '(') + 1;
@@ -319,7 +320,7 @@ class CategoriesController extends AppController {
 					$frequency_id = array_search($frequency, $frequencies);
 					if ($frequency_id === false) {
 						$this->Flash->error("Could not find a frequency matching '$frequency'.");
-						continue;	
+						continue;
 					}
 					$category = ucwords(trim(substr($category, 0, $frequency_start - 1)));
 					$this->Category->create(array(
@@ -332,7 +333,7 @@ class CategoriesController extends AppController {
 					if ($this->Category->save()) {
 						$this->Flash->success("Added $row_details_for_message");
 					} else {
-						$this->Flash->error("Error adding $row_details_for_message");	
+						$this->Flash->error("Error adding $row_details_for_message");
 					}
 				}
 			}

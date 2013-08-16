@@ -1,6 +1,7 @@
 <?php
 App::uses('AppModel', 'Model');
 class LocationType extends AppModel {
+	public $displayField = 'display_name';
 	public $name = 'LocationType';
 	public $hasMany = array('Location', 'Category');
 	public $order = 'LocationType.weight ASC';
