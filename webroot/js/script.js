@@ -5,18 +5,80 @@ function prepareSidebar() {
 	});
 }
 
-function prepareSelect2(select2_data, dataset_view_url) {
-	$("#sidebar_category_select").select2({
-		data: select2_data,
-		width: '180px',
-		placeholder: 'Select a data category...'
-	});
-	$("#sidebar_category_select").on('change', function() {
-		var loading_img = $('<img src="/data_center/img/loading_small.gif" alt="Loading" class="loading" />');
-		$('#s2id_sidebar_category_select').after(loading_img);
-		window.location.href = dataset_view_url+'/'+$(this).val();
-	});
-}
+var indicatorsSearch = {
+	results: null,			// Initially loaded with all possible results
+	datasetViewUrl: null,	// URL to view a dataset, will have the dataset ID appended
+	locationTypes: [],
+	
+	prepareSelect2: function () {
+		$("#sidebar_category_select").select2({
+			data: indicatorsSearch.results,
+			width: '180px',
+			placeholder: 'Select or start typing...',
+			matcher: function (term, text, option) {
+				var matchingLocationTypeIds = [];
+				
+				// For each location name => location type ID pair provided
+				for (locationName in indicatorsSearch.locationTypes) {
+					var locationTypeId = indicatorsSearch.locationTypes[locationName];
+					
+					// Mark this location's type as matching the search term
+					var matchPosition = term.toUpperCase().indexOf(locationName.toUpperCase());
+					if (matchPosition >= 0) {
+						if (matchingLocationTypeIds.indexOf(locationTypeId) == -1) {
+							matchingLocationTypeIds.push(locationTypeId);
+						}
+						
+						// Remove the location name from the term 
+						if (matchPosition == 0) {
+							term = term.substr(locationName.length);
+						} else {
+							term = term.substr(0, matchPosition - 1)+term.substr(matchPosition + locationName.length);
+						}
+						term = term.trim();
+					}
+				}
+				
+				// If the search term matches one or more location types
+				if (matchingLocationTypeIds.length > 0 && option.hasOwnProperty('location_type_id')) {
+					// Remove options that don't match the indicated location types
+					if (matchingLocationTypeIds.indexOf(option.location_type_id) == -1) {
+						return false;
+					}
+				}
+				
+				// Filter by the remaining term normally
+				return text.toUpperCase().indexOf(term.toUpperCase()) >= 0;
+				
+			}
+		});
+		$("#sidebar_category_select").on('change', function() {
+			var loadingImg = $('<img src="/data_center/img/loading_small.gif" alt="Loading" class="loading" />');
+			$('#s2id_sidebar_category_select').after(loadingImg);
+			window.location.href = indicatorsSearch.datasetViewUrl+'/'+$(this).val();
+		});
+	},
+	
+	getMatchingLocationTypeIds: function (term) {
+		var matchingLocationTypeIds = [];
+		
+		// For each location name => location type ID pair provided
+		for (locationName in indicatorsSearch.locationTypes) {
+			var locationTypeId = indicatorsSearch.locationTypes[locationName];
+			
+			// Skip checking for a match for this location if this location's type already matches 
+			if (matchingLocationTypeIds.indexOf(locationTypeId) >= 0) {
+				continue;
+			}
+			
+			// Mark this location's type as matching the search term
+			if (locationName.toUpperCase().indexOf(term.toUpperCase()) >= 0) {
+				matchingLocationTypeIds.push(locationTypeId);
+			}
+		}
+		return matchingLocationTypeIds;
+	}
+};
 
 function setupReleaseCalendar(release_dates) {
 	var d = new Date();

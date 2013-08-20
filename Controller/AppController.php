@@ -154,16 +154,68 @@ class AppController extends Controller {
 			'logged_in' => $this->Auth->loggedIn(),
 			'category_groups' => $this->CategoryGroup->find('list'),
 			'frequencies' => $this->Frequency->find('list'),
-			'select2_data' => $this->__getSelect2Data($menu)
+			'select2_categories' => $this->__getSelect2Categories($menu),
+			'select2_location_types' => $this->__getSelect2LocationTypes()
 		));
 	}
 
-	private function __getSelect2Data($menu) {
+	/*	Returns an array, with keys being search terms and values being corresponding LocationType IDs.
+	 * 	IDs are formatted as strings so this plays nice with the select2 search component.
+	 * 	@return array
+	 */
+	private function __getSelect2LocationTypes() {
+		$this->loadModel('Location');
+		$this->loadModel('LocationType');
+
+		// Get pairs of location names => location type IDs (force strings),
+		// ordered by longest name to shortest name to avoid getting incorrect search results.
+		// Assumes that no two locations have the same name.
+		$results = $this->Location->find('all', array(
+			'fields' => array(
+				'Location.name',
+				'Location.location_type_id'
+			),
+			'order' => 'CHAR_LENGTH(Location.name) DESC',
+			'contain' => false
+		));
+		$locations = array();
+		foreach ($results as $result) {
+			$name = $result['Location']['name'];
+			$locations[$name] = (string) $result['Location']['location_type_id'];
+		}
+
+		// location type display names
+		$location_types = array_flip($this->LocationType->find('list'));
+		// Force IDs to be strings
+		foreach ($location_types as $ltn => $ltid) {
+			$location_types[$ltn] = (string) $ltid;
+		}
+
+		// Location type simple names and plurals
+		$this->LocationType->displayField = 'name';
+		foreach ($this->LocationType->find('list') as $loc_type_id => $loc_type_simple_name) {
+			$location_types[$loc_type_simple_name] = (string) $loc_type_id;
+
+			// Allow 'federal' to be an alias for 'country'
+			if ($loc_type_simple_name == 'country') {
+				$location_types['federal'] = (string) $loc_type_id;
+			}
+
+			// Allow pluralized name
+			$plural = Inflector::pluralize($loc_type_simple_name);
+			$location_types[$plural] = (string) $loc_type_id;
+		}
+
+		return array_merge($locations, $location_types);
+	}
+
+	private function __getSelect2Categories($menu) {
 		$arrange_into_groups = false;
 		$select2_data = array();
 		foreach ($menu as $k => &$location_type) {
 			$select2_loctype = array(
 				'text' => $location_type['LocationType']['display_name'],
+				'location_type_id' => $location_type['LocationType']['id'],
 				'children' => array()
 			);
 			foreach ($location_type['Category'] as $group_name => $categories_in_group) {
@@ -175,7 +227,8 @@ class AppController extends Controller {
 					$label = $category['name'].' ('.strtolower(reset(explode(' ', $category['Frequency']['name']))).')';
 					$select2_group['children'][$label] = array(
 						'id' => $category['id'],
-						'text' => $label
+						'text' => $label,
+						'location_type_id' => $location_type['LocationType']['id']
 					);
 				}
 				if ($arrange_into_groups) {

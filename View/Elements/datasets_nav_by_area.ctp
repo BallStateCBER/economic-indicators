@@ -9,9 +9,10 @@
 	), true);
 	$this->Js->buffer("
 		prepareSidebar();
-		var select2_data = ".$this->Js->object($select2_data).";
-		var dataset_view_url = '".$dataset_view_url."';
-		prepareSelect2(select2_data, dataset_view_url);
+		indicatorsSearch.results = ".$this->Js->object($select2_categories).";
+		indicatorsSearch.datasetViewUrl = '".$dataset_view_url."';
+		indicatorsSearch.locationTypes = ".$this->Js->object($select2_location_types).";
+		indicatorsSearch.prepareSelect2();
 	");
 ?>
 
