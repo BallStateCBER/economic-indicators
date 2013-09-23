@@ -134,3 +134,24 @@ CakePlugin::load('DataCenter');
 CakePlugin::load('Sluggable');
 CakePlugin::load('DebugKit');
 App::uses('FireCake','DebugKit.Lib');
+
+// Migration from 2.1 to 2.2
+// Enable the Dispatcher filters for plugin assets, and
+// CacheHelper.
+Configure::write('Dispatcher.filters', array(
+    'AssetDispatcher',
+    'CacheDispatcher'
+));
+
+// Migration from 2.1 to 2.2
+// Add logging configuration.
+CakeLog::config('debug', array(
+    'engine' => 'FileLog',
+    'types' => array('notice', 'info', 'debug'),
+    'file' => 'debug',
+));
+CakeLog::config('error', array(
+    'engine' => 'FileLog',
+    'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
+    'file' => 'error',
+));
