@@ -139,6 +139,6 @@ class Category extends AppModel {
 			'fields' => array('DISTINCT Dataset.category_id'),
 			'contain' => false
 		));
-		return Set::extract($result, '/Dataset/category_id');
+		return Hash::extract($result, '{n}.Dataset.category_id');
 	}
 }
