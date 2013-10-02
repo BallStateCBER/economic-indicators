@@ -41,7 +41,9 @@ class DatasetsController extends AppController {
 		$this->Frequency->id = $this->Category->field('frequency_id');
 		$frequency = $this->Frequency->field('name');
 		// Just the first word
-		$frequency = strtolower(reset(explode(' ', $frequency)));
+		$frequency_split = explode(' ', $frequency);
+		$frequency_first_word = reset($frequency_split);
+		$frequency = strtolower($frequency_first_word);
 		
 		$this->loadModel('Release');
 		$next_release = $this->Release->getNextUpcoming($category_id);
