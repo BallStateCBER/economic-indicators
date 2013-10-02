@@ -55,7 +55,9 @@
 										<?php
 											$label = '<span class="category">'.$category['name'].'</span>';
 											$label .= '<span class="frequency">';
-											$label .= strtolower(reset(explode(' ', $category['Frequency']['name'])));
+											$freq_words = explode(' ', $category['Frequency']['name']);
+											$first_freq_word = reset($freq_words);
+											$label .= strtolower($first_freq_word);
 											$label .= '</span>';
 											echo $this->Html->link(
 												$label,

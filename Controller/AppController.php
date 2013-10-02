@@ -124,9 +124,13 @@ class AppController extends Controller {
 						'conditions' => array('Dataset.category_id' => $category['id'])
 					));
 					if ($has_data) {
+						$freq_words = explode(' ', $category['Frequency']['name']);
+						$first_freq_word = reset($freq_words);
+						$first_freq_word = strtolower($first_freq_word);
+						$label = "{$category['name']} ($first_freq_word)";
 						$select2_group['children'][] = array(
 							'id' => $category['id'],
-							'text' => $category['name'].' ('.strtolower(reset(explode(' ', $category['Frequency']['name']))).')'
+							'text' => $label
 						);
 					} else {
 						unset($location_type['Category'][$group_name][$category_name]);
@@ -224,7 +228,10 @@ class AppController extends Controller {
 					'children' => array()
 				);
 				foreach ($categories_in_group as $category_name => $category) {
-					$label = $category['name'].' ('.strtolower(reset(explode(' ', $category['Frequency']['name']))).')';
+					$freq_words = explode(' ', $category['Frequency']['name']);
+					$first_freq_word = reset($freq_words);
+					$first_freq_word = strtolower($first_freq_word);
+					$label = "{$category['name']} ($first_freq_word)";
 					$select2_group['children'][$label] = array(
 						'id' => $category['id'],
 						'text' => $label,
