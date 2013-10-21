@@ -93,6 +93,13 @@ function setupReleaseCalendar(release_dates) {
 		var last_date = null;
 	}
 	
+	if (release_dates.min_date) {
+		var first_date_split = release_dates.min_date.split('-');
+		var first_date = new Date(first_date_split[0], first_date_split[1] - 1, first_date_split[2]);
+	} else {
+		var first_date = null;
+	}
+	
 	var tooltip_options = {
 		items: '.has_releases',
 		tooltipClass: 'release_date_tooltip',
@@ -124,7 +131,7 @@ function setupReleaseCalendar(release_dates) {
 	$('#release_calendar').datepicker({
 		// Since only the upcoming releases are provided, 
 		// don't allow the user to navigate to past months
-		minDate: beginning_of_month,
+		minDate: first_date,
 		maxDate: last_date,
 		
 		hideIfNoPrevNext: true,
