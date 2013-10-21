@@ -163,7 +163,30 @@ class ReleasesController extends AppController {
 
 	// Page provided for Victoria to copy and paste content into emails
 	public function upcoming() {
-		$this->__setUpcomingReleases();
-		$this->set('title_for_layout', 'Upcoming Releases');
+		$this->loadModel('LocationType');
+		$location_type_list = $this->LocationType->find('list');
+
+		$this->loadModel('Category');
+		$categories = $this->Category->find('list');
+
+		$releases = $this->Release->getUpcoming();
+		$calendar = array();
+		foreach ($releases as $release) {
+			// Skip if this is a release for a Category that has been deleted
+			if (! isset($release['Category']['name']) || empty($release['Category']['name'])) {
+				continue;
+			}
+			$date = $release['Release']['date'];
+			$loc_type_id = $release['Category']['location_type_id'];
+			$location_type_name = $location_type_list[$loc_type_id];
+			$category_id = $release['Release']['category_id'];
+			$category = $categories[$category_id];
+			$calendar[$date][] = compact('location_type_name', 'category');
+		}
+		
+		$this->set(array(
+			'releases' => $releases,
+			'title_for_layout' => 'Upcoming Releases'
+		));
 	}
 }
