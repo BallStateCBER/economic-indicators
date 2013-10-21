@@ -170,7 +170,7 @@ class ReleasesController extends AppController {
 		$categories = $this->Category->find('list');
 
 		$releases = $this->Release->getUpcoming();
-		$calendar = array();
+		$arranged_releases = array();
 		foreach ($releases as $release) {
 			// Skip if this is a release for a Category that has been deleted
 			if (! isset($release['Category']['name']) || empty($release['Category']['name'])) {
@@ -181,11 +181,11 @@ class ReleasesController extends AppController {
 			$location_type_name = $location_type_list[$loc_type_id];
 			$category_id = $release['Release']['category_id'];
 			$category = $categories[$category_id];
-			$calendar[$date][] = compact('location_type_name', 'category');
+			$arranged_releases[$date][] = compact('location_type_name', 'category');
 		}
 		
 		$this->set(array(
-			'releases' => $releases,
+			'releases' => $arranged_releases,
 			'title_for_layout' => 'Upcoming Releases'
 		));
 	}
