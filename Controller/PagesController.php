@@ -6,7 +6,7 @@ class PagesController extends AppController {
 
 	public function home() {
 		// Prepare data for release calendar
-		$this->__setUpcomingReleases();
+		$this->__setReleaseCalendarData();
 
 		$this->set(array(
 			'title_for_layout' => ''
