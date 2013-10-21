@@ -263,7 +263,7 @@ class AppController extends Controller {
 		$categories = $this->Category->find('list');
 
 		$this->loadModel('Release');
-		$releases = $this->Release->getUpcoming();
+		$releases = $this->Release->getAll();
 
 		$calendar = array();
 		foreach ($releases as $release) {
@@ -280,10 +280,12 @@ class AppController extends Controller {
 		}
 		if (empty($releases)) {
 			$calendar['max_date'] = null;
+			$calendar['min_date'] = null;
 		} else {
 			$dates = array_keys($calendar);
 			sort($dates);
 			$calendar['max_date'] = end($dates);
+			$calendar['min_date'] = reset($dates);
 		}
 		$this->set(array(
 			'calendar' => $calendar,
