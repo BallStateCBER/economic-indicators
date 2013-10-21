@@ -78,6 +78,12 @@ class Release extends AppModel {
 		));
 	}
 	
+	public function getAll() {
+		return $this->find('all', array(
+			'order' => 'Release.date ASC'
+		));
+	}
+	
 	/**
 	 * Returns the date (YYYY-MM-DD) of the next release for the specified category
 	 * @param int $category_id
