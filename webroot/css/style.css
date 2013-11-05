@@ -374,23 +374,23 @@ form .error {
   font-weight: normal;
 }
 form .error-message {
+  background: none;
+  border: none;
+  border-radius: none;
   -moz-border-radius: none;
   -webkit-border-radius: none;
-  border-radius: none;
-  border: none;
-  background: none;
   margin: 0;
   padding-left: 4px;
   padding-right: 0;
 }
 form .error,
 form .error-message {
-  color: #9E2424;
+  box-shadow: none;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   -ms-box-shadow: none;
   -o-box-shadow: none;
-  box-shadow: none;
+  color: #9E2424;
   text-shadow: none;
 }
 div.form,
