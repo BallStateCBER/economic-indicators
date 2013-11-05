@@ -122,6 +122,12 @@ function setupReleaseCalendar(release_dates) {
 			} else {
 				return null;
 			}
+		},
+		show: {
+			duration: 0
+		},
+		hide: {
+			delay: 5000 // 5 seconds
 		}
 	};
 	
