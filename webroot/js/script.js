@@ -128,6 +128,14 @@ function setupReleaseCalendar(release_dates) {
 		},
 		hide: {
 			delay: 5000 // 5 seconds
+		},
+		open: function (event, ui) {
+			var id = ui.tooltip[0]['id'];
+			$('.release_date_tooltip').each(function() {
+				if (this.id != id) {
+					$(this).remove();
+				}
+			});
 		}
 	};
 	
