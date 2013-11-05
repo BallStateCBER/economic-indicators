@@ -115,7 +115,8 @@ function setupReleaseCalendar(release_dates) {
 				for (var i = 0; i < release_dates[date].length; i++) {
 					var loc = release_dates[date][i]['location_type_name'];
 					var cat = release_dates[date][i]['category'];
-					tooltip += '<li><strong>'+cat+'</strong> <span class="loc_type">'+loc+'</span></li>';
+					var cat_id = release_dates[date][i]['category_id'];
+					tooltip += '<li><a href="/categories/view/'+cat_id+'">'+cat+'</a> <span class="loc_type">'+loc+'</span></li>';
 				}
 				tooltip += '</ul>';
 				return tooltip;
