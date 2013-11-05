@@ -112,6 +112,7 @@ function setupReleaseCalendar(release_dates) {
 			var date = element.attr('title');
 			if (release_dates.hasOwnProperty(date)) {
 				var tooltip = '<ul>';
+				tooltip += '<li class="close"><button title="Close">X</button></li>';
 				for (var i = 0; i < release_dates[date].length; i++) {
 					var loc = release_dates[date][i]['location_type_name'];
 					var cat = release_dates[date][i]['category'];
@@ -136,6 +137,10 @@ function setupReleaseCalendar(release_dates) {
 				if (this.id != id) {
 					$(this).remove();
 				}
+			});
+			var close_button = $(ui.tooltip[0]).find('button');
+			close_button.click(function () {
+				$('#'+id).remove();
 			});
 		}
 	};
