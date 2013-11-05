@@ -231,11 +231,24 @@ ul.breadcrumbs .frequency {
 .release_date_tooltip li:last-child {
   padding-bottom: 0;
 }
+.release_date_tooltip li.close {
+  float: right;
+  margin-right: -15px;
+  margin-top: -15px;
+}
 .release_date_tooltip .loc_type {
   color: #666;
   display: block;
   font-size: 80%;
   text-transform: capitalize;
+}
+.release_date_tooltip button {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.3);
+  color: red;
+  font-size: 16px;
+  text-align: center;
 }
 /* Admin */
 #frequency_selects {
