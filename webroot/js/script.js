@@ -129,8 +129,6 @@ function setupReleaseCalendar(release_dates) {
 	};
 	
 	$('#release_calendar').datepicker({
-		// Since only the upcoming releases are provided, 
-		// don't allow the user to navigate to past months
 		minDate: first_date,
 		maxDate: last_date,
 		
