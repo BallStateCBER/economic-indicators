@@ -276,7 +276,7 @@ class AppController extends Controller {
 			$location_type_name = $location_type_list[$loc_type_id];
 			$category_id = $release['Release']['category_id'];
 			$category = $categories[$category_id];
-			$calendar[$date][] = compact('location_type_name', 'category');
+			$calendar[$date][] = compact('location_type_name', 'category', 'category_id');
 		}
 		if (empty($releases)) {
 			$calendar['max_date'] = null;
