@@ -33,22 +33,24 @@
 
 <?php 
 	if ($next_release || $prev_release) {
+		$today_timestamp = strtotime(date('Y-m-d'));
 		echo '<p class="release_notice">';
 		if ($next_release) {
 			echo 'This dataset is scheduled to be updated ';
-			$timestamp = strtotime($next_release);
+			$release_timestamp = strtotime($next_release);
 			if ($next_release == date('Y-m-d')) {
 				echo '<strong>today</strong>';
 			} else {
-				echo 'on <strong>'.date('F j', $timestamp).'<sup>'.date('S', $timestamp).'</sup>';
-				if (date('Y', $timestamp) != date('Y')) {
-					echo ', '.date('Y', $timestamp);
+				echo 'on <strong>'.date('F j', $release_timestamp).'<sup>'.date('S', $release_timestamp).'</sup>';
+				$release_year = date('Y', $release_timestamp);
+				if ($release_year != date('Y')) {
+					echo ', '.$release_year;
 				}
 				echo '</strong>';
 				if ($next_release < date('Y-m-d', strtotime($next_release.' +10 days'))) {
-					$days_away = floor(($timestamp - time())/(60*60*24));
+					$days_away = floor(($release_timestamp - $today_timestamp)/(60*60*24));
 					if ($days_away == 1) {
-						echo ' (tomorrow)';	
+						echo ' (tomorrow)';
 					} else {
 						echo ' ('.$days_away.' days from now)';
 					}
@@ -62,19 +64,20 @@
 			} else {
 				echo 'This dataset ';	
 			}
-			$timestamp = strtotime($prev_release);
+			$release_timestamp = strtotime($prev_release);
 			echo 'was last updated ';
 			if ($prev_release > date('Y-m-d', strtotime('now -10 days'))) {
-				$days_away = floor((time() - $timestamp)/(60*60*24));
+				$days_away = floor(($today_timestamp - $release_timestamp)/(60*60*24));
 				if ($days_away == 1) {
 					echo 'yesterday.';	
 				} else {
 					echo $days_away.' days ago.';
 				}
 			} else {
-				echo 'on '.date('F jS', $timestamp).'.';
-				if (date('Y', $timestamp) != date('Y')) {
-					echo ', '.date('Y', $timestamp);
+				echo 'on '.date('F jS', $release_timestamp).'.';
+				$release_year = date('Y', $release_timestamp);
+				if ($release_year != date('Y')) {
+					echo ', '.$release_year;
 				}
 				echo '.';
 			}
