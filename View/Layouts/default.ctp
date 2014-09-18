@@ -7,7 +7,9 @@
 
 <?php $this->start('subsite_title'); ?>
 	<h1 id="subsite_title" class="max_width">
-		<img src="/img/Indicators.jpg" alt="Economic Indicators" />
+		<a href="/">
+			<img src="/img/Indicators.jpg" alt="Economic Indicators" />
+		</a>
 	</h1>
 <?php $this->end(); ?>
 
