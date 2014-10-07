@@ -168,6 +168,9 @@ class ReleasesController extends AppController {
 		$this->loadModel('Category');
 		$categories = $this->Category->find('list');
 
+		$this->loadModel('Frequency');
+		$frequencies = $this->Frequency->find('list');
+
 		$releases = $this->Release->getUpcoming();
 		$arranged_releases = array();
 		foreach ($releases as $release) {
@@ -180,7 +183,10 @@ class ReleasesController extends AppController {
 			$location_type_name = $location_type_list[$loc_type_id];
 			$category_id = $release['Release']['category_id'];
 			$category = $categories[$category_id];
-			$arranged_releases[$date][] = compact('location_type_name', 'category');
+			$frequency_id = $release['Category']['frequency_id'];
+			$frequency_words = explode(' ', $frequencies[$frequency_id]);
+			$frequency = $frequency_words[0];
+			$arranged_releases[$date][] = compact('location_type_name', 'category', 'frequency');
 		}
 
 		$this->set(array(
