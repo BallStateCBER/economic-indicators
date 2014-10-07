@@ -55,11 +55,16 @@
 								</td>
 								<td>
 									<ul>
-										<?php foreach ($dates as $date => $release_id): ?>
+										<?php
+											$dates_list = array_keys($dates);
+											foreach ($dates_list as $i => $date):
+										?>
 											<li>
 												<?php
+													$release_id = $dates[$date];
 													$timestamp = strtotime($date);
 													$upcoming = $timestamp >= time();
+													$most_recent = $timestamp < time() && (! isset($dates_list[$i + 1]) || strtotime($dates_list[$i + 1]) >= time());
 													$pattern = date('Y', $timestamp) == date('Y') ? 'M j' : 'M j, Y';
 													$displayed_date = date($pattern, $timestamp);
 												 	if ($logged_in) {
@@ -68,8 +73,8 @@
 												 			'action' => 'edit',
 												 			$release_id
 												 		));
-												 	} elseif ($upcoming) {
-												 		echo '<span class="upcoming">'.$displayed_date.'</span>';
+												 	} elseif ($most_recent) {
+												 		echo '<strong>'.$displayed_date.'</strong>';
 													} else {
 												 		echo $displayed_date;
 												 	}
