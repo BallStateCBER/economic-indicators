@@ -40,11 +40,18 @@
 								foreach ($cats as $cat_id => $dates):
 							?>
 								<td>
-									<?php echo $this->Html->link($categories[$cat_id], array(
-										'controller' => 'categories',
-										'action' => 'view',
-										$cat_id
-									)); ?>
+									<?php
+										$category_name = $categories[$cat_id];
+										$category_name = str_replace(' By ', ' by ', $category_name);
+										echo $this->Html->link(
+											$category_name,
+											array(
+												'controller' => 'categories',
+												'action' => 'view',
+												$cat_id
+											)
+										);
+									?>
 								</td>
 								<td>
 									<ul>
