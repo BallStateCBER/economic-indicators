@@ -19,7 +19,7 @@ class ReleasesController extends AppController {
  * @return void
  */
 	public function index() {
-		$releases = $this->Release->getUpcoming();
+		$releases = $this->Release->getUpcomingAndRecent();
 		$structure = array();
 		foreach ($releases as $release) {
 			$loc_type_id = $release['Category']['location_type_id'];
