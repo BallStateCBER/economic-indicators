@@ -56,7 +56,7 @@ class Release extends AppModel {
 			'order' => ''
 		)
 	);
-	
+
 	public function isScheduled($category_id, $date) {
 		$result = $this->find('first', array(
 			'conditions' => array(
@@ -68,7 +68,7 @@ class Release extends AppModel {
 		));
 		return empty($result) ? null : $result['Release']['id'];
 	}
-	
+
 	public function getUpcoming() {
 		return $this->find('all', array(
 			'conditions' => array(
@@ -77,13 +77,26 @@ class Release extends AppModel {
 			'order' => 'Release.date ASC'
 		));
 	}
-	
+
+	/**
+	 * Retrieves releases dated from 3 months ago into the future.
+	 * @return array
+	 */
+	public function getUpcomingAndRecent() {
+		return $this->find('all', array(
+			'conditions' => array(
+				'Release.date >=' => date('Y-m-d', strtotime('now - 3 months'))
+			),
+			'order' => 'Release.date ASC'
+		));
+	}
+
 	public function getAll() {
 		return $this->find('all', array(
 			'order' => 'Release.date ASC'
 		));
 	}
-	
+
 	/**
 	 * Returns the date (YYYY-MM-DD) of the next release for the specified category
 	 * @param int $category_id
@@ -99,7 +112,7 @@ class Release extends AppModel {
 		));
 		return empty($result) ? null : $result['Release']['date'];
 	}
-	
+
 	/**
 	 * Returns the date (YYYY-MM-DD) of the most recent release for the specified category
 	 * @param int $category_id
