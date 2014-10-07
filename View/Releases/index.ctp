@@ -5,7 +5,7 @@
 <div id="upcoming_releases">
 	<?php if (empty($structure)): ?>
 		<p>
-			There are currently no upcoming data releases scheduled. Please check back later for updates. 
+			There are currently no upcoming data releases scheduled. Please check back later for updates.
 		</p>
 	<?php else: ?>
 		<?php foreach ($structure as $loc_type_id => $cat_groups): ?>
@@ -35,7 +35,7 @@
 							<td rowspan="<?php echo count($cats); ?>">
 								<?php echo $category_groups[$cat_group_id]; ?>
 							</td>
-							<?php 
+							<?php
 								$k = 0;
 								foreach ($cats as $cat_id => $dates):
 							?>
@@ -51,30 +51,33 @@
 										<?php foreach ($dates as $date => $release_id): ?>
 											<li>
 												<?php
-													$timestamp = strtotime($date);	
+													$timestamp = strtotime($date);
+													$upcoming = $timestamp >= time();
 													$pattern = date('Y', $timestamp) == date('Y') ? 'M j' : 'M j, Y';
-													$displayed_date = date($pattern, $timestamp); 
+													$displayed_date = date($pattern, $timestamp);
 												 	if ($logged_in) {
 												 		echo $this->Html->link($displayed_date, array(
 												 			'controller' => 'releases',
 												 			'action' => 'edit',
 												 			$release_id
 												 		));
-												 	} else {
-												 		echo $displayed_date;	
+												 	} elseif ($upcoming) {
+												 		echo '<span class="upcoming">'.$displayed_date.'</span>';
+													} else {
+												 		echo $displayed_date;
 												 	}
 												?>
 											</li>
 										<?php endforeach; ?>
 									</ul>
 								</td>
-							<?php 
+							<?php
 								$k++;
 								if ($k < count($cats)) {
-									echo '</tr><tr>';	
+									echo '</tr><tr>';
 								}
 								endforeach;
-							?>		
+							?>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>
