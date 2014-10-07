@@ -79,13 +79,13 @@ class Release extends AppModel {
 	}
 
 	/**
-	 * Retrieves releases dated from 3 months ago into the future.
+	 * Retrieves all releases, starting from a year ago
 	 * @return array
 	 */
 	public function getUpcomingAndRecent() {
 		return $this->find('all', array(
 			'conditions' => array(
-				'Release.date >=' => date('Y-m-d', strtotime('now - 3 months'))
+				'Release.date >=' => date('Y-m-d', strtotime('now - 1 year'))
 			),
 			'order' => 'Release.date ASC'
 		));

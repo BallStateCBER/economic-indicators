@@ -67,7 +67,9 @@
 													$most_recent = $timestamp < time() && (! isset($dates_list[$i + 1]) || strtotime($dates_list[$i + 1]) >= time());
 													$pattern = date('Y', $timestamp) == date('Y') ? 'M j' : 'M j, Y';
 													$displayed_date = date($pattern, $timestamp);
-												 	if ($logged_in) {
+												 	if (! $upcoming && ! $most_recent) {
+												 		// Don't show
+												 	} elseif ($logged_in) {
 												 		echo $this->Html->link($displayed_date, array(
 												 			'controller' => 'releases',
 												 			'action' => 'edit',
