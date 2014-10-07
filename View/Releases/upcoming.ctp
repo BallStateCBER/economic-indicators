@@ -9,10 +9,17 @@
 	<ul>
 		<?php foreach ($releases_on_date as $release): ?>
 			<li>
+				<?php
+					switch ($release['location_type_name']) {
+						case 'United States':
+							echo 'U.S.';
+							break;
+						default:
+							echo $release['location_type_name'];
+					}
+				?>
 				<?php echo $release['category']; ?>,
 				<?php echo $release['frequency']; ?>
-				<br />
-				<?php echo $release['location_type_name']; ?>
 			</li>
 		<?php endforeach; ?>
 	</ul>
