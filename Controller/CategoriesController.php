@@ -202,8 +202,10 @@ class CategoriesController extends AppController {
 			// Just keep the lowercase first word of each frequency name
 			$frequencies[$fid] = strtolower(reset(explode(' ', $frequency)));
 		}
+		$original_display_field = $this->Category->LocationType->displayField;
 		$this->Category->LocationType->displayField = 'name';
 		$location_types = $this->Category->LocationType->find('list');
+		$this->Category->LocationType->displayField = $original_display_field;
 
 		$categories = array(
 			'country' => array(

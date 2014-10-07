@@ -32,7 +32,6 @@ class ReleasesController extends AppController {
 		$this->loadModel('Category');
 		$this->loadModel('CategoryGroup');
 		$this->loadModel('LocationType');
-		$this->LocationType->displayField = 'display_name'; // not sure why this isn't already the default
 		$this->set(array(
 			'title_for_layout' => 'Upcoming Data Releases',
 			'categories' => $this->Category->find('list'),
@@ -183,7 +182,7 @@ class ReleasesController extends AppController {
 			$category = $categories[$category_id];
 			$arranged_releases[$date][] = compact('location_type_name', 'category');
 		}
-		
+
 		$this->set(array(
 			'releases' => $arranged_releases,
 			'title_for_layout' => 'Upcoming Releases'

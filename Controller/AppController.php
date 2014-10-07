@@ -196,6 +196,7 @@ class AppController extends Controller {
 		}
 
 		// Location type simple names and plurals
+		$original_display_field = $this->LocationType->displayField;
 		$this->LocationType->displayField = 'name';
 		foreach ($this->LocationType->find('list') as $loc_type_id => $loc_type_simple_name) {
 			$location_types[$loc_type_simple_name] = (string) $loc_type_id;
@@ -209,6 +210,7 @@ class AppController extends Controller {
 			$plural = Inflector::pluralize($loc_type_simple_name);
 			$location_types[$plural] = (string) $loc_type_id;
 		}
+		$this->LocationType->displayField = $original_display_field;
 
 		return array_merge($locations, $location_types);
 	}
