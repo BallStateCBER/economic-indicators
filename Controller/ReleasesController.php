@@ -33,7 +33,7 @@ class ReleasesController extends AppController {
 		$this->loadModel('CategoryGroup');
 		$this->loadModel('LocationType');
 		$this->set(array(
-			'title_for_layout' => 'Upcoming Data Releases',
+			'title_for_layout' => 'Recent and Upcoming Data Releases',
 			'categories' => $this->Category->find('list'),
 			'category_groups' => $this->CategoryGroup->find('list'),
 			'location_types' => $this->LocationType->find('list'),
