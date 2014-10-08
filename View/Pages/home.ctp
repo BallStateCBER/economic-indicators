@@ -25,7 +25,7 @@
 		<p>
 			Some data sets are released weekly; others may be released monthly, quarterly, or annually.
 			<?php echo $this->Html->link(
-				'Full list of upcoming data releases',
+				'Full list of recent and upcoming data releases',
 				array(
 					'controller' => 'releases',
 					'action' => 'index'
