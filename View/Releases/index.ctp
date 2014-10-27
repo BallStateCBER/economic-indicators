@@ -13,22 +13,6 @@
 				<?php echo $location_types[$loc_type_id]; ?>
 			</h2>
 			<table>
-				<?php /*
-					<thead>
-						<tr>
-							<th>Group</th>
-							<th>Category</th>
-							<th>
-								Dates
-								<?php if ($logged_in): ?>
-									<span class="footnote">
-										(click to edit)
-									</span>
-								<?php endif; ?>
-							</th>
-						</tr>
-					</thead>
-				*/ ?>
 				<tbody>
 					<?php foreach ($cat_groups as $cat_group_id => $cats): ?>
 						<tr>
