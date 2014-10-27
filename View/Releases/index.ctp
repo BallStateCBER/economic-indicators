@@ -41,7 +41,13 @@
 									<ul>
 										<?php
 											$dates_list = array_keys($dates);
+											$displayed_count = 0;
 											foreach ($dates_list as $i => $date):
+
+												// Don't display more than four dates per category
+												if ($displayed_count == 4) {
+													break;
+												}
 										?>
 											<li>
 												<?php
@@ -59,10 +65,14 @@
 												 			'action' => 'edit',
 												 			$release_id
 												 		));
-												 	} elseif ($most_recent) {
-												 		echo '<strong>'.$displayed_date.'</strong>';
-													} else {
-												 		echo $displayed_date;
+														$displayed_count++;
+												 	} else {
+												 		if ($most_recent) {
+													 		echo '<strong>'.$displayed_date.'</strong>';
+														} else {
+													 		echo $displayed_date;
+														}
+														$displayed_count++;
 												 	}
 												?>
 											</li>
