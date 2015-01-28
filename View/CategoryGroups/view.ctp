@@ -12,21 +12,23 @@
 	<ul>
 		<?php foreach ($category_group['Category'] as $category): ?>
 			<li>
-				<?php 
+				<?php
 					$label = '<span class="category">'.$category['name'].'</span>';
 					$label .= '<span class="frequency">';
-					$label .= strtolower(reset(explode(' ', $frequencies[$category['frequency_id']])));
+					$frequency_words = explode(' ', $frequencies[$category['frequency_id']]);
+					$frequency_word = reset($frequency_words);
+					$label .= strtolower($frequency_word);
 					$label .= '</span>';
 					echo $this->Html->link(
 						$label,
 						array(
-							'controller' => 'datasets', 
+							'controller' => 'datasets',
 							'action' => 'view',
 							'category_id' => $category['id']
 						),
 						array(
 							'escape' => false,
-							'class' => 'sidebar_category' 
+							'class' => 'sidebar_category'
 						)
 					);
 				?>
