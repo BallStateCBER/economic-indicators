@@ -8,9 +8,9 @@ class Category extends AppModel {
 		'label' => 'name',
 		'slug' => 'slug',
 		'separator' => '-',
-		'overwrite' => true   
+		'overwrite' => true
 	));
-	
+
 	/*
 	public function getSlugList($scope) {
 		$cache_key = "{$scope}CategorySlugList";
@@ -29,7 +29,7 @@ class Category extends AppModel {
         return $categories;
 	}
 	*/
-	
+
 	/**
 	 * Returns an array with the structure $categories[$location_type][$frequency][$category_id] = $category;
 	 * @return array
@@ -48,13 +48,13 @@ class Category extends AppModel {
 			$frequency_id = $result['Category']['frequency_id'];
 			$frequency = $frequencies[$frequency_id];
 			$category_id = $result['Category']['id'];
-			$categories[$location_type][$frequency][$category_id] = $result['Category']; 
+			$categories[$location_type][$frequency][$category_id] = $result['Category'];
 		}
 		return $categories;
 	}
-	
+
 	/**
-	 * Returns an array to be used as the options for a Category <select> menu, with the keys that correspond to <option value=""> beginning with "null". 
+	 * Returns an array to be used as the options for a Category <select> menu, with the keys that correspond to <option value=""> beginning with "null".
 	 * @return array
 	 */
 	public function getSelectOptions() {
@@ -64,12 +64,12 @@ class Category extends AppModel {
 		$n = 1;
 		foreach ($arranged_categories as $location_type => $frequencies) {
 			foreach ($frequencies as $frequency => $categories) {
-				
+
 				// Display 'country' as 'USA' so it's not confused with 'county'
 				if ($location_type == 'country') {
-					$location_type = 'USA';	
+					$location_type = 'USA';
 				}
-				
+
 				$options["null$n"] = strtoupper("$location_type - $frequency");
 				$n++;
 				foreach ($categories as $category_id => $category_name) {
@@ -79,13 +79,13 @@ class Category extends AppModel {
 				$n++;
 			}
 		}
-		
+
 		// Remove the last (blank) option
 		array_pop($options);
-		
+
 		return $options;
 	}
-	
+
 	/**
 	 * Takes an array of categories and arranges them into groups according to their names
 	 * @param array $categories
@@ -103,22 +103,22 @@ class Category extends AppModel {
 		foreach ($category_groups as $group_id => $group_name) {
 			$retval[$group_name] = array();
 		}
-		
+
 		// Place categories in groups
 		foreach ($categories as $category) {
 			if (isset($category['Category']['category_group_id'])) {
 				$group_id = $category['Category']['category_group_id'];
-				$category_name = $category['Category']['name'];
+				$category_name = $category['Category']['name'].'_'.$category['Category']['id']; // ID appended to create a unique key
 			} elseif (isset($category['category_group_id'])) {
 				$group_id = $category['category_group_id'];
-				$category_name = $category['name'];
+				$category_name = $category['name'].'_'.$category['id'];  // ID appended to create a unique key
 			} else {
 				throw new InternalErrorException('Invalid category');
 			}
 			$group_name = $category_groups[$group_id];
 			$retval[$group_name][$category_name] = $category;
 		}
-		
+
 		// Remove any empty groups and sort
 		foreach ($retval as $group => $categories) {
 			if (empty($categories)) {
@@ -129,7 +129,7 @@ class Category extends AppModel {
 		}
 		return $retval;
 	}
-	
+
 	/**
 	 * Returns an array with the IDs of Categories with Datasets
 	 * @return array
