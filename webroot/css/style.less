@@ -192,37 +192,40 @@ ul.breadcrumbs {
 	.ui-datepicker {
 		font-size: 140%;
 		padding: 0;
-		.ui-datepicker-prev-hover,
-		.ui-datepicker-next-hover {
-			top: 2px;
-		}
-		.ui-datepicker-prev-hover {
-			left: 2px;
-		}
-		.ui-datepicker-next-hover {
-			right: 0px;
-		}
-		.ui-datepicker-next {
-			left: auto; right: 0;
-		}
-		.ui-datepicker-prev,
-		.ui-datepicker-next {
-			font-size: 125%;
-		}
-		.ui-datepicker-prev span,
-		.ui-datepicker-next span {
-			left: auto; line-height: 1.8em;
-		    margin-left: 0;
-		    margin-top: 0;
-		    position: absolute;
-		    top: auto;
-		}
+
 		td {
 			span, a {
 				line-height: 1em;
 				padding: 2px;
 			}
 		}
+	}
+	.ui-datepicker-prev-hover,
+	.ui-datepicker-next-hover {
+		top: 2px;
+	}
+	.ui-datepicker-prev-hover {
+		left: 2px;
+	}
+	.ui-datepicker-next-hover {
+		right: 0px;
+	}
+	.ui-datepicker-prev,
+	.ui-datepicker-next {
+		font-size: 125%;
+
+		span {
+			line-height: 1.8em;
+		    margin-left: 0;
+		    margin-top: 0;
+		    top: auto;
+		}
+	}
+	.ui-datepicker-prev span {
+		right: 0
+	}
+	.ui-datepicker-next span {
+		left: 0;
 	}
 	.has_releases a {
 		color: #c02;
@@ -235,6 +238,10 @@ ul.breadcrumbs {
 	.footnote {
 		color: #555;
 		font-size: 80%;
+	}
+	.ui-icon-circle-triangle-w,
+	.ui-icon-circle-triangle-e {
+		background-image: none;
 	}
 }
 .release_date_tooltip {
@@ -266,10 +273,12 @@ ul.breadcrumbs {
 	}
 	button {
 		background-color: white;
+		border: 1px solid #666;
 		border-radius: 16px;
-		box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.3);
 		color: red;
 		font-size: 16px;
+		height: 20px;
+		width: 20px;
 		text-align: center;
 	}
 }
