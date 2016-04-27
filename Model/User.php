@@ -29,7 +29,7 @@ class User extends AppModel {
 		),
 		'password' => array(
 			'notempty' => array(
-				'rule' => array('notempty'),
+				'rule' => array('notBlank'),
 				'message' => 'Your password cannot be blank.',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -38,7 +38,7 @@ class User extends AppModel {
 			),
 		),
 	);
-	
+
 	public function beforeSave($options = array()) {
 		if (isset($this->data['User']['password'])) {
         	$this->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
