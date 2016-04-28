@@ -5,22 +5,22 @@ class Dataset extends AppModel {
 	public $belongsTo = array('Location', 'Category');
 	public $validate = array(
 		'location_id' => array(
-			'rule'    => 'notEmpty',
+			'rule'    => 'notBlank',
 			'message' => 'Location required',
 			'allowEmpty' => false
 		),
 		'category_id' => array(
-			'rule'    => 'notEmpty',
+			'rule'    => 'notBlank',
 			'message' => 'Category required',
 			'allowEmpty' => false
 		),
 		'code' => array(
-			'rule'    => 'notEmpty',
+			'rule'    => 'notBlank',
 			'message' => 'This field cannot be left blank',
 			'allowEmpty' => false
 		),
 	);
-	
+
 	public function getByCategoryandLocation($category_id, $location_id = null) {
 		// Get Dataset via location and category
 		if ($location_id) {
@@ -28,8 +28,8 @@ class Dataset extends AppModel {
 				'conditions' => compact('category_id', 'location_id')
 			));
 		}
-		
-		// If no location is specified, 
+
+		// If no location is specified,
 		// find the first location with a dataset in this category
 		$this->Category->id = $category_id;
 		$location_type_id = $this->Category->field('location_type_id');
