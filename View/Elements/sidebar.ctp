@@ -30,6 +30,9 @@
 				<?php echo $this->Html->link('Add dataset', array('controller' => 'datasets', 'action' => 'add')); ?>
 			</li>
 			<li>
+                <?php echo $this->Html->link('Edit datasets', array('controller' => 'datasets', 'action' => 'index')); ?>
+            </li>
+			<li>
 				<?php echo $this->Html->link('Add release', array('controller' => 'releases', 'action' => 'add')); ?>
 			</li>
 			<li>
