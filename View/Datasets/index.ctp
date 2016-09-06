@@ -2,19 +2,13 @@
 	<h2><?php echo __('Datasets');?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
-			<th><?php echo $this->Paginator->sort('id');?></th>
-			<th><?php echo $this->Paginator->sort('code');?></th>
-			<th><?php echo $this->Paginator->sort('location_id');?></th>
-			<th><?php echo $this->Paginator->sort('category_id');?></th>
-			<th><?php echo $this->Paginator->sort('created');?></th>
-			<th><?php echo $this->Paginator->sort('modified');?></th>
-			<th class="actions"><?php echo __('Actions');?></th>
+		<th><?php echo $this->Paginator->sort('location_id');?></th>
+		<th><?php echo $this->Paginator->sort('category_id');?></th>
+		<th class="actions"><?php echo __('Actions');?></th>
 	</tr>
 	<?php
 	foreach ($datasets as $dataset): ?>
 	<tr>
-		<td><?php echo h($dataset['Dataset']['id']); ?>&nbsp;</td>
-		<td><?php echo h($dataset['Dataset']['code']); ?>&nbsp;</td>
 		<td>
 			<?php //echo $this->Html->link($dataset['Location']['name'], array('controller' => 'locations', 'action' => 'view', $dataset['Location']['id'])); ?>
 			<?php echo $dataset['Location']['name']; ?>
@@ -22,8 +16,6 @@
 		<td>
 			<?php echo $this->Html->link($dataset['Category']['name'], array('controller' => 'categories', 'action' => 'view', $dataset['Category']['id'])); ?>
 		</td>
-		<td><?php echo h($dataset['Dataset']['created']); ?>&nbsp;</td>
-		<td><?php echo h($dataset['Dataset']['modified']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array(
 				'action' => 'view',
