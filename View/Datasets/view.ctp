@@ -74,7 +74,7 @@
 					echo $days_away.' days ago.';
 				}
 			} else {
-				echo 'on '.date('F jS', $release_timestamp).'.';
+				echo 'on '.date('F jS', $release_timestamp);
 				$release_year = date('Y', $release_timestamp);
 				if ($release_year != date('Y')) {
 					echo ', '.$release_year;
