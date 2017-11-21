@@ -2,6 +2,13 @@
 	Add Dataset
 </h1>
 
+<p>
+    <strong>Important:</strong>
+    Make sure that the HTTPS version of DataZoa URLs (instead of the HTTP version) is used in this code.
+    Otherwise, this website will not be able to display the content served by DataZoa. This may require you to
+    search for "http://" in the code and manually change it to "https://".
+</p>
+
 <?php echo $this->Form->create('Dataset');?>
 <?php echo $this->Form->input('code'); ?>
 <?php echo $this->Html->script('admin', array('inline' => false)); ?>

@@ -2,12 +2,18 @@
 <?php echo $this->Form->create('Dataset');?>
 	<fieldset>
 		<legend><?php echo __('Edit Dataset'); ?></legend>
-	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('code');
-		echo $this->Form->input('location_id');
-		echo $this->Form->input('category_id');
-	?>
+        <p>
+            <strong>Important:</strong>
+            Make sure that the HTTPS version of DataZoa URLs (instead of the HTTP version) is used in this code.
+            Otherwise, this website will not be able to display the content served by DataZoa. This may require you to
+            search for "http://" in the code and manually change it to "https://".
+        </p>
+        <?php
+            echo $this->Form->input('id');
+            echo $this->Form->input('code');
+            echo $this->Form->input('location_id');
+            echo $this->Form->input('category_id');
+        ?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit'));?>
 </div>
