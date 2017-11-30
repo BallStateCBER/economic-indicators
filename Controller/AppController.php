@@ -52,14 +52,10 @@ class AppController extends Controller {
 	            )
 			)
         ),
-		'DataCenter.Flash',
-        'Security'
+		'DataCenter.Flash'
 	);
 
 	public function beforeFilter() {
-        $this->Security->blackHoleCallback = 'forceSSL';
-        $this->Security->requireSecure();
-
 		$this->AutoLogin->settings = array(
 			// Model settings
 			'model' => 'User',
@@ -304,14 +300,4 @@ class AppController extends Controller {
 			'calendar' => $calendar,
 		));
 	}
-
-    /**
-     * Redirects the current request to HTTPS
-     *
-     * @return mixed
-     */
-    public function forceSSL()
-    {
-        return $this->redirect('https://' . env('SERVER_NAME') . $this->here);
-    }
 }
