@@ -107,9 +107,9 @@ class DatasetsController extends AppController {
 				$this->Dataset->id = reset(array_keys($result));
 				$overwriting = true;
 			}
-			
+
+            $verb = $overwriting ? 'overwritten' : 'saved';
 			if ($this->Dataset->save($this->request->data)) {
-				$verb = $overwriting ? 'overwritten' : 'saved';
 				$this->Flash->success("The dataset has been $verb");
 				$this->request->data = array();
 			} else {
