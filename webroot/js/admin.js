@@ -22,11 +22,12 @@ var dataset_form = {
 	},
 	
 	onLocTypeSelect: function() {
-		var loc_type = $('#loc_type_selection').val();
+		var loc_type_hash = $('#loc_type_selection').val();
+		var loc_type_label = $('#loc_type_selection option[value="' + loc_type_hash + '"]').html();
 		this.loc_id_select.show();
 		this.loc_id_select.find('optgroup').each(function() {
 			var optgroup = $(this);
-			if (optgroup.attr('label') == loc_type) {
+			if (optgroup.attr('label') == loc_type_label) {
 				optgroup.show();
 				optgroup.find('option').first().prop('selected', true);
 			} else {
@@ -43,7 +44,7 @@ var dataset_form = {
 		subwrappers.children('select').prop('disabled', true);
 		
 		// Show and enable the appropriate <select>s
-		var categories_wrapper = $('#categories_'+loc_type);
+		var categories_wrapper = $('#categories_'+loc_type_hash);
 		categories_wrapper.show();
 		categories_wrapper.children(':disabled').prop('disabled', false);
 		

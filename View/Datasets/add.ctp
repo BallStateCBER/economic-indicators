@@ -16,7 +16,8 @@
 <?php 
 	$loc_type_select = '<select id="loc_type_selection">';
 	foreach ($locations as $loc_type => $l) {
-		$loc_type_select .= '<option value="'.$loc_type.'">';
+        $loc_type_hash = md5($loc_type);
+		$loc_type_select .= '<option value="' . $loc_type_hash . '" data-label="' . $loc_type . '">';
 		switch ($loc_type) {
 			case 'msa':
 				$loc_type_select .=  'MSA';
@@ -48,9 +49,10 @@
 					$categories_list[$frequency][$category['id']] = $category['name'];
 				}
 			}
+            $loc_type_hash = md5($loc_type);
 			$frequency_select = $this->Form->input('frequency', array(
 				'options' => array_combine($frequencies, $frequencies),
-				'id' => 'frequency_select_'.$loc_type,
+				'id' => 'frequency_select_' . $loc_type_hash,
 				'div' => false,
 				'label' => false,
 				'class' => 'frequency'
@@ -60,7 +62,7 @@
 				'empty' => false,
 				'options' => $categories_list,
 				'between' => $frequency_select,
-				'div' => array('id' => 'categories_'.$loc_type),
+				'div' => array('id' => 'categories_' . $loc_type_hash),
 				'disabled' => true
 			));
 		}
