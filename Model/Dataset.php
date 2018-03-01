@@ -15,11 +15,31 @@ class Dataset extends AppModel {
 			'allowEmpty' => false
 		),
 		'code' => array(
-			'rule'    => 'notBlank',
-			'message' => 'This field cannot be left blank',
-			'allowEmpty' => false
+		    'notblank' => array(
+                'rule'    => 'notBlank',
+                'message' => 'This field cannot be left blank',
+                'allowEmpty' => false
+            ),
+            'notHttp' => array(
+                'rule' => array('notHttp'),
+                'message' =>
+                    'Iframe content must be served over HTTPS, rather than HTTP. ' .
+                    'Please replace src="http:// with src="https:// in this dataset\'s code.'
+            )
 		),
 	);
+
+    /**
+     * Returns TRUE if nothing in the code uses a source served over HTTP
+     *
+     * @param array $check Array of ['code' => 'code for this dataset']
+     * @return bool
+     */
+	public function notHttp($check) {
+	    $code = $check['code'];
+
+	    return stripos($code, 'src="http://') === false;
+    }
 
 	public function getByCategoryandLocation($category_id, $location_id = null) {
 		// Get Dataset via location and category
