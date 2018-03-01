@@ -24,6 +24,8 @@ var dataset_form = {
 	onLocTypeSelect: function() {
 		var loc_type_hash = $('#loc_type_selection').val();
 		var loc_type_label = $('#loc_type_selection option[value="' + loc_type_hash + '"]').html();
+
+		// Show appropriate subset of location options
 		this.loc_id_select.show();
 		this.loc_id_select.find('optgroup').each(function() {
 			var optgroup = $(this);
