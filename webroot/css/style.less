@@ -96,15 +96,10 @@ ul.breadcrumbs {
 		display: inline-block;
 		list-style-type: none;
 		padding: 0 5px 0 0;
-		&:after {
+		&:not(:last-child):after {
 			color: #999;
 			content: '\00BB';
 			margin-left: 5px;
-		}
-		&:last-child {
-			&:after {
-				content: '';
-			}
 		}
 	}
 	.frequency {
