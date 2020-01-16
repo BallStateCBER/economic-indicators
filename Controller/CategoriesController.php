@@ -13,7 +13,7 @@ class CategoriesController extends AppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->deny('add', 'edit', 'delete', 'index');
+		$this->Auth->deny('add', 'edit', 'delete', 'index', 'import');
 	}
 
 	/**

@@ -9,7 +9,7 @@ class UsersController extends AppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->deny('add', 'edit', 'delete', 'view');	
+		$this->Auth->deny('add', 'edit', 'delete', 'view', 'index', 'my_account');
 	}
 
 /**
